@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetForge | Intelligent Networking Diagnostics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            900: '#1e3a8a',
+                        },
+                        dark: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['"Fira Code"', '"JetBrains Mono"', 'monospace'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+        }
+
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Terminal Blinking Cursor */
+        .cursor::after {
+            content: '█';
+            animation: blink 1s step-start infinite;
+            color: #60a5fa;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Subtle Gradient Text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #60a5fa, #a78bfa);
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <nav class="fixed w-full z-50 glass-card border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-2 text-xl font-bold tracking-tighter">
+                    <i class="fa-solid fa-network-wired text-brand-400"></i> NetForge
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#features"
+                            class="hover:text-brand-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Features</a>
+                        <a href="#commands"
+                            class="hover:text-brand-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Commands</a>
+                        <a href="#engine"
+                            class="hover:text-brand-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Diagnostic
+                            Engine</a>
+                        <a href="#install"
+                            class="bg-brand-600 hover:bg-brand-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-brand-500/20">Install
+                            CLI</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div
+            class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand-900/40 via-dark-950 to-dark-950 -z-10">
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-8">
+                    Next-Generation <br />
+                    <span class="text-gradient">Intelligent Diagnostics</span>
+                </h1>
+                <p class="text-xl text-gray-400 mb-10 leading-relaxed max-w-2xl mx-auto">
+                    Replace fragmented tools like <code
+                        class="bg-dark-800 px-2 py-1 rounded text-sm text-brand-400">ping</code>, <code
+                        class="bg-dark-800 px-2 py-1 rounded text-sm text-brand-400">dig</code>, and <code
+                        class="bg-dark-800 px-2 py-1 rounded text-sm text-brand-400">curl</code>. NetForge provides a
+                    unified, developer-first CLI to diagnose DNS, TCP, HTTP, and TLS issues instantly.
+                </p>
+
+                <div id="install" class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                    <div class="relative group w-full max-w-lg">
+                        <div
+                            class="absolute -inset-0.5 bg-gradient-to-r from-brand-500 to-purple-600 rounded-lg blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200">
+                        </div>
+                        <div
+                            class="relative flex items-center justify-between bg-dark-900 border border-white/10 rounded-lg p-1 w-full">
+                            <code
+                                class="font-mono text-sm text-gray-300 pl-4 py-3 overflow-x-auto whitespace-nowrap scrollbar-hide">
+                                curl -sSL ".../install.sh" | bash
+                            </code>
+                            <button onclick="copyInstall()"
+                                class="ml-2 bg-dark-800 hover:bg-dark-700 border border-white/10 text-white px-4 py-3 rounded-md text-sm transition-colors flex items-center gap-2 group-hover:border-white/20">
+                                <i class="fa-regular fa-copy" id="copy-icon"></i> <span id="copy-text">Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="max-w-4xl mx-auto glass-card rounded-xl overflow-hidden shadow-2xl border border-white/10 mt-12">
+                <div class="bg-dark-900 border-b border-white/5 px-4 py-3 flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    <div class="mx-auto text-xs font-mono text-gray-500">netforge doctor https://api.example.com</div>
+                </div>
+                <div class="p-6 font-mono text-sm overflow-x-auto bg-black/50">
+                    <div id="terminal-content" class="text-gray-300 leading-relaxed">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="py-24 bg-dark-900 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-white mb-4">Production-Grade Capabilities</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Built for modern infrastructure, NetForge turns raw
+                    networking data into actionable insights instantly.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors">
+                    <div
+                        class="w-12 h-12 bg-brand-500/20 text-brand-400 rounded-lg flex items-center justify-center mb-6 text-xl">
+                        <i class="fa-solid fa-stethoscope"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Intelligent `doctor`</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">The flagship command orchestrates multiple checks
+                        in parallel, providing actionable root-cause analysis rather than just raw data dumps.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors">
+                    <div
+                        class="w-12 h-12 bg-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center mb-6 text-xl">
+                        <i class="fa-solid fa-terminal"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Premium Terminal UI</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Beautiful, color-coded output with structured
+                        tables built with <code
+                            class="text-purple-300 text-xs bg-purple-900/30 px-1 rounded">lipgloss</code> and <code
+                            class="text-purple-300 text-xs bg-purple-900/30 px-1 rounded">tablewriter</code> for
+                        ultimate readability.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-2xl hover:border-brand-500/50 transition-colors">
+                    <div
+                        class="w-12 h-12 bg-green-500/20 text-green-400 rounded-lg flex items-center justify-center mb-6 text-xl">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Machine Readable</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">Global support for <code
+                            class="text-green-300 text-xs bg-green-900/30 px-1 rounded">--json</code> output allows
+                        seamless integration with CI/CD pipelines, automation scripts, and monitoring stacks.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="commands" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="w-full md:w-1/3">
+                    <h2 class="text-3xl font-bold mb-6">Specialized Probes</h2>
+                    <p class="text-gray-400 mb-8">Deep-dive into specific networking layers. Pick a tool, inspect the
+                        data, and resolve the issue without leaving your terminal.</p>
+
+                    <div class="space-y-2 font-mono text-sm" id="command-list">
+                        <button onclick="switchCommand('dns')"
+                            class="w-full text-left px-4 py-3 rounded-lg bg-dark-800 border border-brand-500 text-brand-400 transition-all cmd-btn"
+                            data-target="dns">> netforge dns</button>
+                        <button onclick="switchCommand('http')"
+                            class="w-full text-left px-4 py-3 rounded-lg hover:bg-dark-800 border border-transparent text-gray-400 transition-all cmd-btn"
+                            data-target="http">> netforge http</button>
+                        <button onclick="switchCommand('tls')"
+                            class="w-full text-left px-4 py-3 rounded-lg hover:bg-dark-800 border border-transparent text-gray-400 transition-all cmd-btn"
+                            data-target="tls">> netforge tls</button>
+                        <button onclick="switchCommand('scan')"
+                            class="w-full text-left px-4 py-3 rounded-lg hover:bg-dark-800 border border-transparent text-gray-400 transition-all cmd-btn"
+                            data-target="scan">> netforge scan</button>
+                        <button onclick="switchCommand('monitor')"
+                            class="w-full text-left px-4 py-3 rounded-lg hover:bg-dark-800 border border-transparent text-gray-400 transition-all cmd-btn"
+                            data-target="monitor">> netforge monitor</button>
+                    </div>
+                </div>
+
+                <div
+                    class="w-full md:w-2/3 glass-card rounded-xl p-6 border border-white/10 min-h-[300px] flex flex-col justify-center bg-dark-900">
+                    <div id="cmd-description" class="mb-4 text-brand-400 font-semibold">Detailed record lookup and TTL
+                        analysis.</div>
+                    <div class="bg-black/60 rounded-lg p-4 font-mono text-sm text-green-400 border border-white/5">
+                        $ <span id="cmd-example">netforge dns example.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="engine" class="py-24 bg-dark-900 border-y border-white/5 relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mr-48 -mt-48 w-96 h-96 rounded-full bg-brand-900/20 blur-3xl"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <h2 class="text-3xl font-bold mb-12 text-center">🧠 The Analysis Engine</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-dark-950 p-6 rounded-xl border border-white/5 border-l-4 border-l-red-500">
+                    <h4 class="font-bold text-white mb-2">Firewall Blocks</h4>
+                    <p class="text-sm text-gray-400">Detects scenarios where DNS resolution succeeds but TCP connections
+                        silently fail or timeout.</p>
+                </div>
+                <div class="bg-dark-950 p-6 rounded-xl border border-white/5 border-l-4 border-l-orange-500">
+                    <h4 class="font-bold text-white mb-2">Certificate Chain Errors</h4>
+                    <p class="text-sm text-gray-400">Identifies handshake failures due to untrusted roots or missing
+                        intermediate certificates.</p>
+                </div>
+                <div class="bg-dark-950 p-6 rounded-xl border border-white/5 border-l-4 border-l-yellow-500">
+                    <h4 class="font-bold text-white mb-2">Expiry Warnings</h4>
+                    <p class="text-sm text-gray-400">Proactively alerts if a TLS certificate is set to expire within the
+                        next 7 days.</p>
+                </div>
+                <div class="bg-dark-950 p-6 rounded-xl border border-white/5 border-l-4 border-l-brand-500">
+                    <h4 class="font-bold text-white mb-2">Performance Issues</h4>
+                    <p class="text-sm text-gray-400">Highlights high Time-To-First-Byte (TTFB) to separate network lag
+                        from app lag.</p>
+                </div>
+                <div class="bg-dark-950 p-6 rounded-xl border border-white/5 border-l-4 border-l-purple-500">
+                    <h4 class="font-bold text-white mb-2">Application Failures</h4>
+                    <p class="text-sm text-gray-400">Correlates 5xx HTTP status codes directly to backend health state.
+                    </p>
+                </div>
+                <div class="bg-dark-950 p-6 rounded-xl border border-white/5 border-l-4 border-l-gray-500">
+                    <h4 class="font-bold text-white mb-2">Protocol Mismatches</h4>
+                    <p class="text-sm text-gray-400">Scans and detects weak cipher suites or deprecated TLS protocol
+                        versions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 bg-dark-950 border-t border-white/10 text-center">
+        <div class="flex items-center justify-center gap-2 text-2xl font-bold tracking-tighter mb-6 text-gray-300">
+            <i class="fa-solid fa-network-wired text-brand-500"></i> NetForge
+        </div>
+        <p class="text-gray-500 text-sm">
+            Built with <i class="fa-solid fa-heart text-red-500 mx-1"></i> by the <strong>Kloudz Computing
+                Team</strong>.
+        </p>
+    </footer>
+
+    <script>
+        // Copy to clipboard functionality
+        function copyInstall() {
+            const code = 'curl -sSL "https://raw.githubusercontent.com/onelabtech/netforge/main/scripts/install.sh?$(date +%s)" | bash';
+            navigator.clipboard.writeText(code).then(() => {
+                const textEl = document.getElementById('copy-text');
+                const iconEl = document.getElementById('copy-icon');
+
+                textEl.innerText = 'Copied!';
+                iconEl.className = 'fa-solid fa-check text-green-400';
+
+                setTimeout(() => {
+                    textEl.innerText = 'Copy';
+                    iconEl.className = 'fa-regular fa-copy';
+                }, 2000);
+            });
+        }
+
+        // Terminal Typing Animation for Hero Section
+        const terminalOutput = `
+<span class="text-brand-400">~</span>$ netforge doctor https://api.example.com
+<span class="text-gray-500">[INFO]</span> Initializing intelligent checks for api.example.com...
+<span class="text-green-400">✔</span> DNS Resolution (A, AAAA)    [OK] (24ms)
+<span class="text-green-400">✔</span> TCP Connection (:443)       [OK] (32ms)
+<span class="text-red-400">✖</span> TLS Handshake               [FAIL] (Untrusted Root)
+
+<span class="text-white font-bold underline bg-red-500/20 px-2 py-1 mt-2 inline-block">DIAGNOSIS</span>
+<span class="text-red-400 font-bold">Probable Cause:</span> Certificate Chain Error.
+<span class="text-gray-400">Details:</span> The server provided a certificate but failed to provide the intermediate CA.
+<span class="text-brand-400">Suggested Fix:</span> Ensure your web server configuration includes the full bundle.pem.
+
+<span class="cursor"></span>`;
+
+        // Simulate a slight delay before showing terminal text
+        setTimeout(() => {
+            document.getElementById('terminal-content').innerHTML = terminalOutput;
+        }, 800);
+
+        // Interactive Command Switcher
+        const commandData = {
+            dns: {
+                desc: "Detailed record lookup and TTL analysis.",
+                cmd: "netforge dns example.com"
+            },
+            http: {
+                desc: "Timing breakdown including TTFB and header inspection.",
+                cmd: "netforge http https://example.com/health"
+            },
+            tls: {
+                desc: "Handshake verification, expiry tracking, and cipher suite discovery.",
+                cmd: "netforge tls example.com:443"
+            },
+            scan: {
+                desc: "Diagnostic-friendly, safe TCP connect scans.",
+                cmd: "netforge scan example.com"
+            },
+            monitor: {
+                desc: "Periodic health checks tailored for endpoints.",
+                cmd: "netforge monitor https://api.example.com --interval 10s"
+            }
+        };
+
+        function switchCommand(key) {
+            // Update Active Button styling
+            document.querySelectorAll('.cmd-btn').forEach(btn => {
+                if (btn.dataset.target === key) {
+                    btn.classList.add('bg-dark-800', 'border-brand-500', 'text-brand-400');
+                    btn.classList.remove('border-transparent', 'text-gray-400', 'hover:bg-dark-800');
+                } else {
+                    btn.classList.remove('bg-dark-800', 'border-brand-500', 'text-brand-400');
+                    btn.classList.add('border-transparent', 'text-gray-400', 'hover:bg-dark-800');
+                }
+            });
+
+            // Update content with slight fade effect
+            const descEl = document.getElementById('cmd-description');
+            const cmdEl = document.getElementById('cmd-example');
+
+            descEl.style.opacity = 0;
+            cmdEl.style.opacity = 0;
+
+            setTimeout(() => {
+                descEl.innerText = commandData[key].desc;
+                cmdEl.innerText = commandData[key].cmd;
+                descEl.style.opacity = 1;
+                cmdEl.style.opacity = 1;
+                descEl.style.transition = 'opacity 0.2s';
+                cmdEl.style.transition = 'opacity 0.2s';
+            }, 150);
+        }
+    </script>
+</body>
+
+</html>
