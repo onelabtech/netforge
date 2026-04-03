@@ -18,7 +18,7 @@
 
 To install NetForge instantly:
 ```bash
-curl -sSL https://raw.githubusercontent.com/onelabtech/netforge/main/scripts/install.sh | bash
+curl -sSL "https://raw.githubusercontent.com/onelabtech/netforge/main/scripts/install.sh?$(date +%s)" | bash
 ```
 *(Note: As this is a local build, you can use the local install script)*:
 ```bash
