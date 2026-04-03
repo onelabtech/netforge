@@ -20,53 +20,41 @@ To install NetForge instantly:
 ```bash
 curl -sSL "https://raw.githubusercontent.com/onelabtech/netforge/main/scripts/install.sh?$(date +%s)" | bash
 ```
-*(Note: As this is a local build, you can use the local install script)*:
-```bash
-./scripts/install.sh
-```
-
-### From Source
-```bash
-# Requires Go 1.21+
-go mod download
-go build -o netforge main.go
-./netforge --help
-```
 
 ## 🛠 Usage Examples
 
 ### 1. The Flagship: `doctor`
 Perfect for when you're thinking "why is this endpoint down?".
 ```bash
-./netforge doctor https://api.example.com
+netforge doctor https://api.example.com
 ```
 
 ### 2. DNS Investigation
 Detailed record lookup and TTL analysis.
 ```bash
-./netforge dns example.com
+netforge dns example.com
 ```
 
 ### 3. HTTP Performance
 Timing breakdown including TTFB and header inspection.
 ```bash
-./netforge http https://example.com/health
+netforge http https://example.com/health
 ```
 
 ### 4. TLS/SSL Inspection
 Handshake verification, expiry tracking, and cipher suite discovery.
 ```bash
-./netforge tls example.com:443
+netforge tls example.com:443
 ```
 
 ### 5. Safe Port Scan
 ```bash
-./netforge scan example.com
+netforge scan example.com
 ```
 
 ### 6. Endpoint Monitoring
 ```bash
-./netforge monitor https://api.example.com --interval 10s
+netforge monitor https://api.example.com --interval 10s
 ```
 
 ## 🧠 Diagnostic Rules
@@ -82,7 +70,7 @@ NetForge includes an analysis engine that detects:
 ## 📊 JSON Export
 All commands support `--json` for structured reporting.
 ```bash
-./netforge doctor google.com --json > report.json
+netforge doctor google.com --json > report.json
 ```
 
 ---
